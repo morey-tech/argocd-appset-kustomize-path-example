@@ -6,5 +6,6 @@ echo "post-start start" >> ~/status
 
 # kind delete cluster --name akuity-declarative-example
 kind create cluster --config .devcontainer/kind-cluster.yaml
+kind export kubeconfig --name argocd-appset-kustomize-path-example
 
 echo "post-start complete" >> ~/status
