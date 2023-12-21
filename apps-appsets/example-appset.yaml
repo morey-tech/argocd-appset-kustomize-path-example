@@ -10,12 +10,8 @@ spec:
     - git:
         repoURL: https://github.com/morey-tech/argocd-appset-kustomize-path-example
         revision: HEAD
-        directories:
-          - path: '*'
-          - path: argocd
-            exclude: true
-          - path: apps-appsets
-            exclude: true
+        files:
+          - path: '*/kustomization.yaml'
   template:
     metadata:
       name: '{{.path.basenameNormalized}}-example'
@@ -27,6 +23,7 @@ spec:
         repoURL: https://github.com/morey-tech/argocd-appset-kustomize-path-example
         targetRevision: HEAD
         path: '{{.path.path}}'
+        kustomize: {}
       destination:
         name: kind
         namespace: '{{.path.basenameNormalized}}'
