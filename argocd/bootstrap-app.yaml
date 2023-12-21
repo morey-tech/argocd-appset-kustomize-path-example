@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: bootstrap
+spec:
+  destination:
+    name: in-cluster
+    namespace: argocd
+  source:
+    path: apps-appsets/
+    repoURL: 'https://github.com/morey-tech/argocd-appset-kustomize-path-example'
+    targetRevision: HEAD
+    directory: {}
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
