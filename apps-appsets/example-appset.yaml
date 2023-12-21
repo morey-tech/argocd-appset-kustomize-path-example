@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: example
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - git:
+        repoURL: https://github.com/morey-tech/argocd-appset-kustomize-path-example
+        revision: HEAD
+        directories:
+          - path: '*'
+          - path: argocd
+            exclude: true
+  template:
+    metadata:
+      name: '{{.path.basenameNormalized}}-example'
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/morey-tech/argocd-appset-kustomize-path-example
+        targetRevision: HEAD
+        path: '{{.path.path}}'
+      destination:
+        name: kind
+        namespace: '{{.path.basenameNormalized}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - FailOnSharedResource=true
+        retry:
+          limit: 1
+      info:
+        - name: 'Environment Name: '
+          value: '{{.path.basenameNormalized}}'
